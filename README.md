@@ -1,5 +1,5 @@
 # speech-sentiment-python
-polite software
+Edit to work with a webcam on Raspberry Pi, remove .env requirements.
 
 
 ## .env
