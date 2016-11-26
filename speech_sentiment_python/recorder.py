@@ -11,7 +11,8 @@ class Recorder:
         self.threshold = 500
         self.chunk_size = 1024
         self.format = pyaudio.paInt16
-        self.rate = 16000
+        #This is the rate, must check what the Pi can do. Also must check for compatibility with IBM speech model. 
+        self.rate = 16000 
         self.maximum = 16384
 
     def is_silent(self, snd_data):
