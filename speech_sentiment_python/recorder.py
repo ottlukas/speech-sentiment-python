@@ -11,7 +11,7 @@ class Recorder:
         self.threshold = 500
         self.chunk_size = 1024
         self.format = pyaudio.paInt16
-        self.rate = 44100
+        self.rate = 16000
         self.maximum = 16384
 
     def is_silent(self, snd_data):
