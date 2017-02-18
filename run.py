@@ -90,21 +90,23 @@ def get_text_sentiment(text):
 
 def main():
     
-##    recorder = Recorder("speech.wav")
-##
-##    print("Please say something nice into the microphone\n")
-##    recorder.record_to_file()
-##
-##    print("Transcribing audio....\n")
-##    result = transcribe_audio('speech.wav')
-##    
-##    text = result['results'][0]['alternatives'][0]['transcript']
-##    print("Text: " + text + "\n")
-    response=response_conversation("Hello, Lisa")
+    recorder = Recorder("speech.wav")
+
+    print("Please say something nice into the microphone\n")
+    recorder.record_to_file()
+
+    print("Transcribing audio....\n")
+    result = transcribe_audio('speech.wav')
+    
+    text = result['results'][0]['alternatives'][0]['transcript']
+    print("Text: " + text + "\n")
+    response=response_conversation(text)
     print(response)
-    sentiment, score = get_text_sentiment(response)
+    sentiment, score = get_text_sentiment(text)
     print(sentiment, score)
-    output = str(response[0]+' '+ 'is'+' '+ sentiment)
+    output = str(text+' '+ 'is'+' '+ sentiment)
+    synthesize_audio(output)
+    output = str(response[0])
     synthesize_audio(output)
 
 if __name__ == '__main__':
