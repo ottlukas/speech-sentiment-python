@@ -7,8 +7,25 @@ from watson_developer_cloud import AlchemyLanguageV1 as AlchemyLanguage
 import pyaudio
 import wave
 from watson_developer_cloud import TextToSpeechV1
+from watson_developer_cloud import ConversationV1
 
 from speech_sentiment_python.recorder import Recorder
+
+def response_conversation(text):
+    conversation = ConversationV1(
+    username=os.environ.get("CONVERSATION_USERNAME"),
+    password=os.environ.get("CONVERSATION_PASSWORD"),
+    version='2016-09-20')
+
+    # use your own workspace_id
+    workspace_id = os.environ.get("WORKSPACE_ID")
+
+    response = conversation.message(workspace_id=workspace_id, message_input={
+        'text': text})
+    #print(json.dumps(response, indent=2))
+    answer = response['output']['text']
+    #print(answer)
+    return answer    
 
             
 
@@ -72,20 +89,22 @@ def get_text_sentiment(text):
     return result['docSentiment']['type'], result['docSentiment']['score']
 
 def main():
-    recorder = Recorder("speech.wav")
-
-    print("Please say something nice into the microphone\n")
-    recorder.record_to_file()
-
-    print("Transcribing audio....\n")
-    result = transcribe_audio('speech.wav')
     
-    text = result['results'][0]['alternatives'][0]['transcript']
-    print("Text: " + text + "\n")
-    
-    sentiment, score = get_text_sentiment(text)
+##    recorder = Recorder("speech.wav")
+##
+##    print("Please say something nice into the microphone\n")
+##    recorder.record_to_file()
+##
+##    print("Transcribing audio....\n")
+##    result = transcribe_audio('speech.wav')
+##    
+##    text = result['results'][0]['alternatives'][0]['transcript']
+##    print("Text: " + text + "\n")
+    response=response_conversation("Hello, Lisa")
+    print(response)
+    sentiment, score = get_text_sentiment(response)
     print(sentiment, score)
-    output = str(sentiment + ' '+score)
+    output = str(response[0]+' '+ 'is'+' '+ sentiment)
     synthesize_audio(output)
 
 if __name__ == '__main__':
