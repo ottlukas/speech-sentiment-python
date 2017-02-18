@@ -25,9 +25,7 @@ def response_conversation(text):
     #print(json.dumps(response, indent=2))
     answer = response['output']['text']
     #print(answer)
-    return answer    
-
-            
+    return answer                
 
 def transcribe_audio(path_to_audio_file):
     username = os.environ.get("SPEECH_TO_TEXT_USERNAME")
@@ -39,7 +37,7 @@ def transcribe_audio(path_to_audio_file):
         return speech_to_text.recognize(audio_file,
             content_type='audio/wav')
     
-def synthesize_audio(text):
+def synthesize_audio(text,tvoice):
 
     text_to_speech = TextToSpeechV1(
     username=os.environ.get("TEXT_TO_SPEECH_USERNAME"),
@@ -50,7 +48,7 @@ def synthesize_audio(text):
           'wb') as audio_file:
         audio_file.write(
             text_to_speech.synthesize(text, accept='audio/wav',
-                                      voice="en-US_AllisonVoice"))
+                                      voice=tvoice))
 
     #define stream chunk   
     chunk = 1024  
@@ -101,13 +99,13 @@ def main():
     text = result['results'][0]['alternatives'][0]['transcript']
     print("Text: " + text + "\n")
     response=response_conversation(text)
-    print(response)
+    print('Answer: 'response)
     sentiment, score = get_text_sentiment(text)
     print(sentiment, score)
     output = str(text+' '+ 'is'+' '+ sentiment)
-    synthesize_audio(output)
+    synthesize_audio(output,'en-US_MichaelVoice')
     output = str(response[0])
-    synthesize_audio(output)
+    synthesize_audio(output,'en-US_AllisonVoice')
 
 if __name__ == '__main__':
     dotenv_path = join(dirname(__file__), '.env')
