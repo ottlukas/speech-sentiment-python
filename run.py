@@ -112,7 +112,8 @@ if __name__ == '__main__':
     try:
         main()
     except:
-        print("IOError detected,...")
+        print("IOError detected,restarting...")
+        main()
 
 
 
