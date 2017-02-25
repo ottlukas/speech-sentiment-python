@@ -2,6 +2,7 @@ import os
 import json
 from os.path import join, dirname
 
+
 from watson_developer_cloud import SpeechToTextV1 as SpeechToText
 from watson_developer_cloud import AlchemyLanguageV1 as AlchemyLanguage
 import config
@@ -9,6 +10,9 @@ import pyaudio
 import wave
 from watson_developer_cloud import TextToSpeechV1
 from watson_developer_cloud import ConversationV1
+from watson_developer_cloud import SpeechToTextV1 as SpeechToText
+from watson_developer_cloud import AlchemyLanguageV1 as AlchemyLanguage
+import config
 
 from speech_sentiment_python.recorder import Recorder
 
@@ -80,12 +84,24 @@ def synthesize_audio(text,tvoice):
 
 def get_text_sentiment(text):
     alchemy_api_key = config.ALCHEMY_API_KEY
+
     
+    #Uncomment to see FULL json output
+    #print str(result_emotion)
+    print result_emotion['docEmotions']
+    return result_emotion['docEmotions']
+
+
+def get_text_sentiment(text):
+    #return a dictionary containing text sentiment and values
+    alchemy_api_key = config.API_KEY   
     alchemy_language = AlchemyLanguage(api_key=alchemy_api_key)
     result = alchemy_language.sentiment(text=text)
-    if result['docSentiment']['type'] == 'neutral':
-        return 'neutral', 0
-    return result['docSentiment']['type'], result['docSentiment']['score']
+
+    #Uncomment to see FULL json output
+    #print str(result)
+    print result['docSentiment']
+    return result['docSentiment']
 
 def main():
     
@@ -107,6 +123,7 @@ def main():
     synthesize_audio(output,'en-US_MichaelVoice')
     output = str(response[0])
     synthesize_audio(output,'en-US_AllisonVoice')
+
 
 if __name__ == '__main__':
     try:
