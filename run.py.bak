@@ -78,14 +78,24 @@ def synthesize_audio(text,tvoice):
     p.terminate()  
 
 def get_text_sentiment(text):
+    alchemy_api_key = config.ALCHEMY_API_KEY
+
+    
+    #Uncomment to see FULL json output
+    #print str(result_emotion)
+    print result_emotion['docEmotions']
+    return result_emotion['docEmotions']
+
+
+def get_text_sentiment(text):
     #return a dictionary containing text sentiment and values
-    alchemy_api_key = config.ALCHEMY_API_KEY   
+    alchemy_api_key = config.API_KEY   
     alchemy_language = AlchemyLanguage(api_key=alchemy_api_key)
     result = alchemy_language.sentiment(text=text)
 
     #Uncomment to see FULL json output
     #print str(result)
-    #print (result['docSentiment'])
+    print result['docSentiment']
     return result['docSentiment']
 
 def main():
@@ -102,9 +112,8 @@ def main():
     print("Text: " + text + "\n")
     response=response_conversation(text)
     print('Answer: '+ str(response))
-    sentiment = get_text_sentiment(text)['type']
-    score = get_text_sentiment(text)['score']
-    print(text,'is',score,sentiment)
+    sentiment, score = get_text_sentiment(text)
+    print(sentiment, score)
     output = str(text+' '+ 'is'+' '+ sentiment)
     synthesize_audio(output,'en-US_MichaelVoice')
     output = str(response[0])
